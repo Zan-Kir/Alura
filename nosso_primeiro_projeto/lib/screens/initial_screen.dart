@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:nosso_primeiro_projeto/data/task_inherited.dart';
 import 'package:nosso_primeiro_projeto/screens/form_screen.dart';
 
-import '../components/task.dart';
-
 class InitialScreen extends StatefulWidget {
   const InitialScreen({super.key});
 
@@ -19,13 +17,9 @@ class _InitialScreenState extends State<InitialScreen> {
         leading: Container(),
         title: const Text('Tarefas'),
       ),
-      body: ListView(children: [
-        ...TaskInherited.of(context).taskList,
-        //... ele coloca os itens de uma lista dentro de outra.
-        const SizedBox(
-          height: 100,
-        )
-      ]),
+      body: ListView(children:
+        TaskInherited.of(context).taskList,
+      ),
       floatingActionButton: FloatingActionButton(
         shape: const CircleBorder(),
         backgroundColor: Colors.black54,
