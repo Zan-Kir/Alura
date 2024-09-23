@@ -7,16 +7,24 @@ class Task extends StatefulWidget {
   final String image;
   final int difficulty;
 
-  const Task(this.name, this.image, this.difficulty, {super.key});
+  Task(this.name, this.image, this.difficulty, {super.key});
+
+  int masteryLvl = 0;
+  int nivel = 0;
+  Color? masteryColor = const Color(0xFF2F80ED);
 
   @override
   State<Task> createState() => _TaskState();
 }
 
 class _TaskState extends State<Task> {
-  Color? masteryColor = const Color(0xFF2F80ED);
-  int masteryLvl = 0;
-  int nivel = 0;
+
+  bool assetOrNetwork() {
+    if (widget.image.contains('http')) {
+      return false;
+    }
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +35,7 @@ class _TaskState extends State<Task> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              color: masteryColor,
+              color: widget.masteryColor,
             ),
             height: 140,
           ),
@@ -51,10 +59,15 @@ class _TaskState extends State<Task> {
                       height: 100,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
-                        child: Image.asset(
-                          widget.image,
-                          fit: BoxFit.cover,
-                        ),
+                        child: (assetOrNetwork())
+                            ? Image.asset(
+                                widget.image,
+                                fit: BoxFit.cover,
+                              )
+                            : Image.network(
+                                widget.image,
+                                fit: BoxFit.cover,
+                              ),
                       ),
                     ),
                     Column(
@@ -78,30 +91,28 @@ class _TaskState extends State<Task> {
                       child: ElevatedButton(
                         onPressed: () {
                           setState(() {
-                            nivel++;
-                            if (nivel / widget.difficulty == 10){
-                              masteryLvl++;
-                              if(masteryLvl <= 6) {
-                                nivel = 0;
+                            widget.nivel++;
+                            if (widget.nivel / widget.difficulty == 10) {
+                              widget.masteryLvl++;
+                              if (widget.masteryLvl <= 6) {
+                                widget.nivel = 0;
                               }
                             }
-                            switch (masteryLvl) {
+                            switch (widget.masteryLvl) {
                               case 1:
-                                masteryColor = Colors.green;
+                                widget.masteryColor = Colors.green;
                               case 2:
-                                masteryColor = Colors.yellow[600];
+                                widget.masteryColor = Colors.yellow[800];
                               case 3:
-                                masteryColor = Colors.orange;
+                                widget.masteryColor = Colors.orange;
                               case 4:
-                                masteryColor = Colors.red;
+                                widget.masteryColor = Colors.red;
                               case 5:
-                                masteryColor = Colors.purpleAccent;
+                                widget.masteryColor = Colors.purpleAccent;
                               case 6:
-                                masteryColor = Colors.black;
+                                widget.masteryColor = Colors.black;
                             }
-
                           });
-                          // print(nivel);
                         },
                         style: ElevatedButton.styleFrom(
                           shape: const RoundedRectangleBorder(
@@ -134,14 +145,16 @@ class _TaskState extends State<Task> {
                       width: 200,
                       child: LinearProgressIndicator(
                         color: Colors.white,
-                        value: (widget.difficulty > 0) ? ((nivel / widget.difficulty) / 10) : 1,
+                        value: (widget.difficulty > 0)
+                            ? ((widget.nivel / widget.difficulty) / 10)
+                            : 1,
                       ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Nível: $nivel',
+                      'Nível: ${widget.nivel}',
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),
