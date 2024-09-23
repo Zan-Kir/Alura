@@ -104,7 +104,7 @@ class _TaskState extends State<Task> {
                               case 2:
                                 widget.masteryColor = Colors.yellow[800];
                               case 3:
-                                widget.masteryColor = Colors.orange;
+                                widget.masteryColor = Colors.orange[800];
                               case 4:
                                 widget.masteryColor = Colors.red;
                               case 5:
