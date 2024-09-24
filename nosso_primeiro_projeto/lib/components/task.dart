@@ -7,12 +7,31 @@ class Task extends StatefulWidget {
   final String name;
   final String image;
   final int difficulty;
+  int nivel;
+  int masteryLvl;
 
-  Task(this.name, this.image, this.difficulty, {super.key});
+  Task(this.name, this.image, this.difficulty, {this.nivel = 0, this.masteryLvl = 0, super.key});
 
-  int masteryLvl = 0;
-  int nivel = 0;
-  Color? masteryColor = const Color(0xFF2F80ED);
+  Color? masteryColor;
+
+  Color? getMasteryColor(masteryLvl) {
+    switch (masteryLvl) {
+      case 0:
+        return const Color(0xFF2F80ED);
+      case 1:
+        return Colors.green;
+      case 2:
+        return Colors.yellow[800];
+      case 3:
+        return Colors.orange[800];
+      case 4:
+        return Colors.red;
+      case 5:
+        return Colors.purpleAccent;
+      case 6:
+        return Colors.black;
+    } return null;
+  }
 
   @override
   State<Task> createState() => _TaskState();
@@ -124,21 +143,9 @@ class _TaskState extends State<Task> {
                               if (widget.masteryLvl <= 6) {
                                 widget.nivel = 0;
                               }
+                              widget.masteryColor = widget.getMasteryColor(widget.masteryLvl);
                             }
-                            switch (widget.masteryLvl) {
-                              case 1:
-                                widget.masteryColor = Colors.green;
-                              case 2:
-                                widget.masteryColor = Colors.yellow[800];
-                              case 3:
-                                widget.masteryColor = Colors.orange[800];
-                              case 4:
-                                widget.masteryColor = Colors.red;
-                              case 5:
-                                widget.masteryColor = Colors.purpleAccent;
-                              case 6:
-                                widget.masteryColor = Colors.black;
-                            }
+                            TaskDao().save(widget);
                           });
                         },
                         style: ElevatedButton.styleFrom(

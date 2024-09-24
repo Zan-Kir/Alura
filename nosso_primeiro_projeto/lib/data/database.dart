@@ -10,3 +10,4 @@ Future<Database> getDatabase() async {
           1); //ele abre o arquivo no path e caso nao exista cria uma nova tabela
 }
 
+
