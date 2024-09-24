@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nosso_primeiro_projeto/data/task_dao.dart';
 
 import 'difficulty.dart';
 
@@ -18,7 +19,6 @@ class Task extends StatefulWidget {
 }
 
 class _TaskState extends State<Task> {
-
   bool assetOrNetwork() {
     if (widget.image.contains('http')) {
       return false;
@@ -89,6 +89,33 @@ class _TaskState extends State<Task> {
                       height: 52,
                       width: 52,
                       child: ElevatedButton(
+                        onLongPress: () {
+                          showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Deseja excluir ${widget.name}?'),
+                                  content:
+                                      Text('A ação não pode ser desfeita.'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('Não'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        TaskDao().delete(widget.name);
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('Sim'),
+                                    ),
+                                  ],
+                                  elevation: 24,
+                                );
+                              });
+                        },
                         onPressed: () {
                           setState(() {
                             widget.nivel++;

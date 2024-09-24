@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:nosso_primeiro_projeto/components/task.dart';
+import 'package:nosso_primeiro_projeto/data/task_dao.dart';
 import 'package:nosso_primeiro_projeto/data/task_inherited.dart';
 
 class FormScreen extends StatefulWidget {
@@ -137,6 +139,7 @@ class _FormScreenState extends State<FormScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
+                        TaskDao().save(Task(nameController.text, imageController.text, int.parse(difficultyController.text)));
                         TaskInherited.of(widget.taskContext).newTask(
                             nameController.text,
                             imageController.text,
@@ -146,7 +149,7 @@ class _FormScreenState extends State<FormScreen> {
                             content: Text('Criando uma nova Tarefa'),
                           ),
                         );
-                        Navigator.pop(context);
+                        Navigator.pop(context, true);
                       }
                     },
                     child: const Text('Adicionar'),
