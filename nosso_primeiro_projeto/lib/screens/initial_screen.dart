@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:nosso_primeiro_projeto/components/task.dart';
 import 'package:nosso_primeiro_projeto/data/task_dao.dart';
 import 'package:nosso_primeiro_projeto/data/task_inherited.dart';
@@ -96,7 +97,50 @@ class _InitialScreenState extends State<InitialScreen> {
                           itemCount: items.length,
                           itemBuilder: (BuildContext context, int index) {
                             final Task task = items[index];
-                            return task;
+                            return Slidable(
+                              key: ValueKey(task.name),
+                              endActionPane: ActionPane(
+                                motion: const ScrollMotion(),
+                                extentRatio: 0.25,
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (context) {
+                                      showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                  'Deseja excluir ${task.name}?'),
+                                              content: const Text(
+                                                  'A ação não pode ser desfeita.'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text('Não'),
+                                                ),
+                                                TextButton(
+                                                  onPressed: () {
+                                                    TaskDao().delete(task.name);
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                  child: const Text('Sim'),
+                                                ),
+                                              ],
+                                              elevation: 24,
+                                            );
+                                          });
+                                    },
+                                    backgroundColor: Colors.red,
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete,
+                                    label: 'Delete',
+                                  ),
+                                ],
+                              ),
+                              child: task,
+                            );
                           });
                     }
                     return const Center(
