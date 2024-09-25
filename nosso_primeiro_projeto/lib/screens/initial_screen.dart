@@ -49,7 +49,7 @@ class _InitialScreenState extends State<InitialScreen> {
               icon: const Icon(Icons.loop),
               onPressed: () {
                 setState(() {
-                  globalLevel = TaskInherited.of(context).updateSumLevel();
+
                 });
               },
             ),
@@ -97,6 +97,7 @@ class _InitialScreenState extends State<InitialScreen> {
                           itemCount: items.length,
                           itemBuilder: (BuildContext context, int index) {
                             final Task task = items[index];
+                            globalLevel = task.globalPoints();
                             return Slidable(
                               key: ValueKey(task.name),
                               endActionPane: ActionPane(

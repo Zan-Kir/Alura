@@ -30,7 +30,27 @@ class Task extends StatefulWidget {
         return Colors.purpleAccent;
       case 6:
         return Colors.black;
+      case 7:
+        return Colors.greenAccent;
     } return null;
+  }
+
+  double globalPoints() {
+    return _globalPoints();
+  }
+
+  double _globalPoints() {
+    double total = 0;
+    double multiplier = difficulty /10;
+    double baseLvl = multiplier * (masteryLvl * (difficulty * 10));
+    if (masteryLvl < 7 && masteryLvl > 0){
+      total = (nivel != 0) ? total += baseLvl + (nivel * multiplier) : total += baseLvl;
+    } else {
+        total += baseLvl + (nivel * multiplier);
+    }
+
+
+    return total;
   }
 
   @override
@@ -113,8 +133,10 @@ class _TaskState extends State<Task> {
                             widget.nivel++;
                             if (widget.nivel / widget.difficulty == 10) {
                               widget.masteryLvl++;
-                              if (widget.masteryLvl <= 6) {
+                              if (widget.masteryLvl < 7) {
                                 widget.nivel = 0;
+                              } else {
+                                widget.masteryLvl = 6;
                               }
                               widget.masteryColor = widget.getMasteryColor(widget.masteryLvl);
                             }
