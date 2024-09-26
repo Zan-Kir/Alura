@@ -14,6 +14,7 @@ class InitialScreen extends StatefulWidget {
 
 class _InitialScreenState extends State<InitialScreen> {
   double globalLevel = 0.00;
+  List<Task>? tasks;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,12 @@ class _InitialScreenState extends State<InitialScreen> {
               icon: const Icon(Icons.loop),
               onPressed: () {
                 setState(() {
-
+                  globalLevel = 0.00;
+                  if (tasks != null && tasks!.isNotEmpty) {
+                    for (Task task in tasks!) {
+                      globalLevel += task.globalPoints();
+                    }
+                  }
                 });
               },
             ),
@@ -61,7 +67,7 @@ class _InitialScreenState extends State<InitialScreen> {
         child: FutureBuilder<List<Task>>(
             future: TaskDao().findAll(),
             builder: (context, snapshot) {
-              List<Task>? items = snapshot.data;
+              tasks = snapshot.data;
               switch (snapshot.connectionState) {
                 case ConnectionState.none:
                   return const Center(
@@ -91,13 +97,12 @@ class _InitialScreenState extends State<InitialScreen> {
                     ),
                   );
                 case ConnectionState.done:
-                  if (snapshot.hasData && items != null) {
-                    if (items.isNotEmpty) {
+                  if (snapshot.hasData && tasks != null) {
+                    if (tasks!.isNotEmpty) {
                       return ListView.builder(
-                          itemCount: items.length,
+                          itemCount: tasks!.length,
                           itemBuilder: (BuildContext context, int index) {
-                            final Task task = items[index];
-                            globalLevel = task.globalPoints();
+                            final Task task = tasks![index];
                             return Slidable(
                               key: ValueKey(task.name),
                               endActionPane: ActionPane(

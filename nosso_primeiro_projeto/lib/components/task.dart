@@ -48,8 +48,6 @@ class Task extends StatefulWidget {
     } else {
         total += baseLvl + (nivel * multiplier);
     }
-
-
     return total;
   }
 
